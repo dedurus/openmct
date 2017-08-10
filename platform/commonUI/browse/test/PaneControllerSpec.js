@@ -29,7 +29,9 @@ define(
                 mockAgentService,
                 mockDomainObjects,
                 mockWindow,
-                controller;
+                controller,
+                mockLocation,
+                mockAttrs;
 
             // We want to reinstantiate for each test case
             // because device state can influence constructor-time behavior
@@ -37,7 +39,9 @@ define(
                 return new PaneController(
                     mockScope,
                     mockAgentService,
-                    mockWindow
+                    mockWindow,
+                    mockLocation,
+                    mockAttrs
                 );
             }
 
@@ -59,6 +63,13 @@ define(
                     ["isMobile", "isPhone", "isTablet", "isPortrait", "isLandscape"]
                 );
                 mockWindow = jasmine.createSpyObj("$window", ["open"]);
+
+                mockLocation = { search: function () {
+                        return {};
+                    }
+                };
+
+                mockAttrs = {};
             });
 
             it("is initially visible", function () {
@@ -85,6 +96,28 @@ define(
 
                 // Tree should have collapsed
                 expect(controller.visible()).toBeFalsy();
+            });
+
+            describe("specifying hideParameter", function () {
+                it("hideTree sets tree state to false", function () {
+                    mockLocation = {search: function () {
+                        return {hideTree: true};
+                    }};
+                    mockAttrs = {hideParameter: 'hideTree'};
+                    expect(instantiateController().visible()).toBeFalsy();
+                });
+    
+                it("hideInspector sets inspector state to false", function () {
+                    mockLocation = {search: function () {
+                        return {hideInspector: true};
+                    }};
+                    mockAttrs = {hideParameter: 'hideInspector'};
+                    expect(instantiateController().visible()).toBeFalsy();
+                });
+    
+                it("if url does not include hide parameters then Tree and Inspector are visible", function () {
+                    expect(instantiateController().visible()).toBeTruthy();
+                });
             });
         });
     }

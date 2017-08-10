@@ -108,7 +108,8 @@ define([
                         "$scope",
                         "agentService",
                         "$window",
-                        "$location"
+                        "$location",
+                        "$attrs"
                     ]
                 },
                 {
@@ -136,7 +137,8 @@ define([
                         "agentService",
                         "$window",
                         "navigationService",
-                        "$location"
+                        "$location",
+                        "$attrs"
                     ]
                 }
             ],
@@ -224,7 +226,6 @@ define([
                         "contextual"
                     ],
                     "depends": [
-                        "$location",
                         "urlService",
                         "$window"
                     ],

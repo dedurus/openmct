@@ -31,12 +31,19 @@ define(
          * @constructor
          * @memberof platform/commonUI/browse
          */
-        function PaneController($scope, agentService, $window, $location) {
+        function PaneController($scope, agentService, $window, $location, $attrs) {
             var self = this;
             this.agentService = agentService;
 
-            this.state = !$location.search()["tabOpened"];
-            console.log(this);
+            var hideParameterPresent = $location.search().hasOwnProperty($attrs.hideParameter);
+
+            if ($attrs.hideParameter && hideParameterPresent) {
+                this.state = false;
+                $location.search($attrs.hideParameter, undefined);
+            } else {
+                this.state = true;
+            }
+
             /**
              * Callback to invoke when any selection occurs in the tree.
              * This controller can be passed in as the `parameters` object
